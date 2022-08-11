@@ -1,0 +1,8 @@
+vendor
+.buildpath
+.settings
+.project
+build
+resources/php.ini
+composer.lock
+nbproject
