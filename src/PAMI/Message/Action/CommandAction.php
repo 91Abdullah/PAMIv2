@@ -29,6 +29,8 @@
  */
 namespace PAMI\Message\Action;
 
+use PAMI\Exception\PAMIException;
+
 /**
  * Command action message.
  *
@@ -49,10 +51,12 @@ class CommandAction extends ActionMessage
      * @param string $command CLI Command to issue.
      *
      * @return void
+     * @throws PAMIException
      */
     public function __construct($command)
     {
         parent::__construct('Command');
         $this->setKey('Command', $command);
+        $this->setResponseHandler("Command");
     }
 }

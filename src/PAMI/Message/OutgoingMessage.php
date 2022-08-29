@@ -28,6 +28,8 @@
  */
 namespace PAMI\Message;
 
+use PAMI\Exception\PAMIException;
+
 /**
  * A generic outgoing message.
  *
@@ -41,4 +43,43 @@ namespace PAMI\Message;
  */
 abstract class OutgoingMessage extends Message
 {
+    /**
+     * String of the Class name to handle the Response to this Message
+     *
+     * @var string
+     */
+    private $responseHandler = null;
+
+    /**
+     * Returns the class name of the response handler.
+     *
+     * @return string|null
+     */
+    public function getResponseHandler()
+    {
+        return $this->responseHandler;
+    }
+
+    /**
+     * Set the response handler.
+     *
+     * @param $newResponseHandler
+     * @return void
+     * @throws PAMIException
+     */
+    public function setResponseHandler($newResponseHandler)
+    {
+        /*if (class_exists($newResponseHandler) && is_a($newResponseHandler, '\PAMI\Message\Response\Response', true)) {
+            $this->responseHandler = $newResponseHandler;
+            return;
+        }*/
+
+        $className = '\\PAMI\\Message\\Response\\' . $newResponseHandler . 'Response';
+        if (class_exists($className, true) && is_a($className, '\PAMI\Message\Response\Response', true)) {
+            $this->responseHandler = $className;
+            return;
+        }
+
+        throw new PAMIException('ResponseHandler '.$className.' could not be found. Please provide a fully qualified class name.');
+    }
 }
